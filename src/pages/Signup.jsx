@@ -1,14 +1,36 @@
-import { Link } from "react-router-dom";
-
-function Signup() {
-  return (
-    <div style={{ padding: 20 }}>
-      <h1>Sign up</h1>
-      <p>This will become your signup page.</p>
-
-      <Link to="/login">Already have an account? Login</Link>
-    </div>
-  );
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  gap: 10px;
+  font-family: sans-serif;
+  color: #ff6600; /* main accent color */
 }
 
-export default Signup;
+.loader {
+  display: flex;
+  gap: 5px;
+}
+
+.loader div {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #ff6600, #00cfff, #ff00c8);
+  animation: bounce 0.6s infinite alternate;
+}
+
+.loader div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loader div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  to {
+    transform: translateY(-15px);
+  }
+}
