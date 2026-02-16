@@ -1,71 +1,72 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "../lib/supabaseClient.js";
 import { useNavigate } from "react-router-dom";
 import PasswordToggle from "../components/PasswordToggle.jsx";
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(false); // default to signup
+  const [isLogin, setIsLogin] = useState(false); // Default to Sign-Up
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(true); // NEW: loader state
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Loader state
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        navigate("/"); // redirect to home if logged in
-      } else {
-        setLoading(false); // show auth form
-      }
-    });
-
-    // listen to auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        navigate("/"); 
-      }
-    });
-
-    return () => listener.subscription.unsubscribe();
-  }, []);
-
+  // Handle normal signup/login
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isLogin && !username) return alert("Please enter a username");
 
-    if (isLogin) {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return alert(error.message);
-      navigate("/"); 
-    } else {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { username } }
-      });
-      if (error) return alert(error.message);
-      await supabase.from("app_users").insert({ id: data.user.id, username });
-      navigate("/"); 
+    if (!isLogin && password !== confirmPassword)
+      return alert("Passwords do not match");
+
+    try {
+      if (isLogin) {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        navigate("/"); // Redirect to home
+      } else {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { username } }
+        });
+        if (error) throw error;
+        await supabase.from("app_users").insert({ id: data.user.id, username });
+        navigate("/"); // Redirect to home
+      }
+    } catch (error) {
+      alert(error.message);
     }
   };
 
+  // Handle Discord OAuth login
   const handleDiscord = async () => {
-    setLoading(true); // show loader while redirecting
-    await supabase.auth.signInWithOAuth({
-      provider: "discord",
-      options: { scopes: "identify email guilds", redirectTo: window.location.origin }
-    });
+    setLoading(true); // Show loader after OAuth
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: "discord",
+        options: { scopes: "identify email guilds", redirectTo: window.location.origin }
+      });
+      // After redirect back from Discord, loader will show while session is verified
+      // You can use supabase.auth.onAuthStateChange in Home.jsx for final redirect
+    } catch (error) {
+      alert(error.message);
+      setLoading(false);
+    }
   };
 
   if (loading) {
+    // Colorful loader post-Discord authentication
     return (
       <div className="loader-container">
         <div className="loader">
-          <div></div><div></div><div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
-        <p>Checking session...</p>
+        <p>Loading your account...</p>
       </div>
     );
   }
@@ -78,7 +79,7 @@ export default function Auth() {
           <div className="form-group">
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Choose a username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -88,7 +89,7 @@ export default function Auth() {
         <div className="form-group">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -100,6 +101,14 @@ export default function Auth() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {!isLogin && (
+          <PasswordToggle
+            id="confirmPassword"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        )}
         <button type="submit">{isLogin ? "Login" : "Create Account"}</button>
       </form>
 
