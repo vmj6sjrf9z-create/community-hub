@@ -1,25 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-function Home() {
-  return <h1>Home Page</h1>;
-}
-
-function Login() {
-  return <h1>Login Page</h1>;
-}
-
-function Signup() {
-  return <h1>Signup Page</h1>;
-}
+import { Routes, Route, Navigate } from "react-router-dom";
+import Auth from "./pages/Auth.jsx";
+import Home from "./pages/Home.jsx";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/" element={<Home />} />
+      <Route path="*" element={<Navigate to="/auth" />} />
+    </Routes>
   );
 }
