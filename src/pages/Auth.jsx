@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PasswordToggle from "../components/PasswordToggle.jsx";
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false); // Default to Sign-up first
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,10 +39,8 @@ export default function Auth() {
 
   return (
     <div className="container">
-      <h1 className={`fade ${isLogin ? "fade-in" : "fade-out"}`}>
-        {isLogin ? "Community Hub Login" : "Community Hub Sign-Up"}
-      </h1>
-      <form onSubmit={handleSubmit} className={`fade ${isLogin ? "fade-in" : "fade-out"}`}>
+      <h1>{isLogin ? "Community Hub Login" : "Community Hub Sign-Up"}</h1>
+      <form onSubmit={handleSubmit}>
         {!isLogin && (
           <div className="form-group">
             <input
@@ -72,10 +70,7 @@ export default function Auth() {
         <button type="submit">{isLogin ? "Login" : "Create Account"}</button>
       </form>
 
-      <div
-        className="login-link"
-        onClick={() => setIsLogin(!isLogin)}
-      >
+      <div className="login-link" onClick={() => setIsLogin(!isLogin)}>
         {isLogin
           ? "Don't have an account? Sign up"
           : "Already have an account? Login"}
@@ -87,5 +82,3 @@ export default function Auth() {
     </div>
   );
 }
-
-export default Auth
