@@ -2,10 +2,18 @@ import { supabase } from "../lib/supabaseClient.js";
 
 export default function ExternalAuth() {
   const handleDiscord = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "discord",
-      options: { scopes: "identify email guilds", redirectTo: window.location.origin }
-    });
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "discord",
+        options: {
+          redirectTo: window.location.origin, // redirect back to your app
+        },
+      });
+
+      if (error) throw error;
+    } catch (err) {
+      alert(`Discord login error: ${err.message}`);
+    }
   };
 
   return (
