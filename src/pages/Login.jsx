@@ -9,7 +9,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return alert(error.message);
@@ -20,10 +20,14 @@ export default function Login() {
   return (
     <div className="container">
       <h1>Community Hub Login</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <div className="form-group">
+          <label htmlFor="loginEmail">
+            Email <sup style={{ color: "red" }}>*</sup>
+          </label>
           <input
             type="email"
+            id="loginEmail"
             placeholder="you@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -31,12 +35,17 @@ export default function Login() {
           />
         </div>
 
-        <PasswordToggle
-          id="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="form-group">
+          <label htmlFor="loginPassword">
+            Password <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <PasswordToggle
+            id="loginPassword"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
         <button type="submit">Login</button>
       </form>
