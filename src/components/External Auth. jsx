@@ -1,0 +1,16 @@
+import { supabase } from "../lib/supabaseClient.js";
+
+export default function ExternalAuth() {
+  const handleDiscord = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "discord",
+      options: { scopes: "identify email guilds", redirectTo: window.location.origin }
+    });
+  };
+
+  return (
+    <button className="discord-btn" onClick={handleDiscord}>
+      <i className="fab fa-discord"></i> Sign in with Discord
+    </button>
+  );
+}
