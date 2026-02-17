@@ -1,14 +1,27 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+
+// Pages
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
-import Home from "./pages/Home.jsx";
+import HomeRender from "./pages/homePage/homeRender.jsx";
+import TasksRender from "./pages/tasksPage/tasksRender.jsx";
+import TeamsRender from "./pages/teamsPage/teamsRender.jsx";
+import SettingsRender from "./pages/settingsPage/settingsRender.jsx";
 
 export default function App() {
   return (
     <Routes>
+      {/* Auth pages */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/" element={<Home />} />
+
+      {/* Main pages */}
+      <Route path="/" element={<HomeRender />} />
+      <Route path="/tasks" element={<TasksRender />} />
+      <Route path="/teams" element={<TeamsRender />} />
+      <Route path="/settings" element={<SettingsRender />} />
+
+      {/* Catch-all redirect */}
       <Route path="*" element={<Navigate to="/signup" />} />
     </Routes>
   );
