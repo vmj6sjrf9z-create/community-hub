@@ -1,0 +1,151 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#0b0f17;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  color:white;
+}
+
+/* phone frame */
+.phone{
+  width:100vw;
+  height:100vh;
+  background:linear-gradient(180deg,#0f1624,#0b0f17);
+  border-radius:40px;
+  padding:25px 18px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* topbar */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.topbar h1{
+  font-size:22px;
+  font-weight:600;
+}
+
+.top-icons i{
+  font-size:20px;
+  margin-left:15px;
+  cursor:pointer;
+  opacity:.8;
+}
+
+/* greeting / subtitle */
+.greeting p{
+  color:#9aa4b2;
+  margin-bottom:25px;
+}
+
+/* cards */
+.cards{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.card{
+  background:#151c2c;
+  border-radius:18px;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  cursor:pointer;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:scale(1.02);
+}
+
+.card-icon{
+  width:45px;
+  height:45px;
+  border-radius:12px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:18px;
+}
+
+.blue{ background:#1f6feb; }
+.green{ background:#2ea043; }
+.purple{ background:#8957e5; }
+
+.card-text h3{
+  font-size:17px;
+}
+
+.card-text p{
+  font-size:13px;
+  color:#9aa4b2;
+}
+
+.arrow{
+  margin-left:auto;
+  opacity:.6;
+}
+
+/* bottom nav */
+.bottom-nav{
+  position:absolute;
+  bottom:15px;
+  left:15px;
+  right:15px;
+  background:#111827;
+  border-radius:22px;
+  padding:12px 10px;
+  display:flex;
+  justify-content:space-around;
+}
+
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:12px;
+  opacity:.6;
+}
+
+.nav-item i{
+  font-size:18px;
+  margin-bottom:3px;
+}
+
+.nav-item.active{
+  color:#1f6feb;
+  opacity:1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px){
+  .phone{
+    padding:20px 15px;
+    border-radius:30px;
+  }
+  .topbar h1{
+    font-size:20px;
+  }
+  .card-text h3{
+    font-size:16px;
+  }
+  .card-text p{
+    font-size:12px;
+  }
+  }
