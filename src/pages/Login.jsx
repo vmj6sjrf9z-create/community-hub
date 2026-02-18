@@ -14,7 +14,8 @@ export default function Login() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return alert(error.message);
 
-    navigate("/"); // redirect to home
+    // Redirect to home page after login
+    navigate("/home");
   };
 
   return (
@@ -22,9 +23,7 @@ export default function Login() {
       <h1>Community Hub Login</h1>
       <form onSubmit={handleLogin}>
         <div className="form-group">
-          <label htmlFor="loginEmail">
-            Email <sup style={{ color: "red" }}>*</sup>
-          </label>
+          <label htmlFor="loginEmail">Email <sup style={{ color: "red" }}>*</sup></label>
           <input
             type="email"
             id="loginEmail"
@@ -36,9 +35,7 @@ export default function Login() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="loginPassword">
-            Password <sup style={{ color: "red" }}>*</sup>
-          </label>
+          <label htmlFor="loginPassword">Password <sup style={{ color: "red" }}>*</sup></label>
           <PasswordToggle
             id="loginPassword"
             placeholder="••••••••"
