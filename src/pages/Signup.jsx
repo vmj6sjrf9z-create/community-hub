@@ -18,7 +18,8 @@ export default function Signup() {
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) return alert(error.message);
 
-    navigate("/"); // redirect to home page after signup
+    // Redirect to home page after signup
+    navigate("/home");
   };
 
   return (
@@ -27,9 +28,7 @@ export default function Signup() {
 
       <form onSubmit={handleSignup}>
         <div className="form-group">
-          <label htmlFor="username">
-            Username <sup style={{ color: "red" }}>*</sup>
-          </label>
+          <label htmlFor="username">Username <sup style={{ color: "red" }}>*</sup></label>
           <input
             type="text"
             id="username"
@@ -41,9 +40,7 @@ export default function Signup() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">
-            Email <sup style={{ color: "red" }}>*</sup>
-          </label>
+          <label htmlFor="email">Email <sup style={{ color: "red" }}>*</sup></label>
           <input
             type="email"
             id="email"
@@ -55,9 +52,7 @@ export default function Signup() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">
-            Password <sup style={{ color: "red" }}>*</sup>
-          </label>
+          <label htmlFor="password">Password <sup style={{ color: "red" }}>*</sup></label>
           <PasswordToggle
             id="password"
             placeholder="••••••••"
@@ -67,9 +62,7 @@ export default function Signup() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="confirmPassword">
-            Confirm Password <sup style={{ color: "red" }}>*</sup>
-          </label>
+          <label htmlFor="confirmPassword">Confirm Password <sup style={{ color: "red" }}>*</sup></label>
           <PasswordToggle
             id="confirmPassword"
             placeholder="••••••••"
