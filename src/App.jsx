@@ -11,20 +11,20 @@ import SettingsRender from "./pages/settingsPage/settingsRender.jsx";
 export default function App() {
   return (
     <Routes>
-      {/* Start at signup */}
+      {/* Default redirect */}
       <Route path="/" element={<Navigate to="/signup" />} />
 
-      {/* Auth pages */}
+      {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
-      {/* Main pages */}
+      {/* Main */}
       <Route path="/home" element={<HomeRender />} />
       <Route path="/tasks" element={<TasksRender />} />
       <Route path="/teams" element={<TeamsRender />} />
       <Route path="/settings" element={<SettingsRender />} />
 
-      {/* Catch-all redirect */}
+      {/* Catch-all */}
       <Route path="*" element={<Navigate to="/signup" />} />
     </Routes>
   );
