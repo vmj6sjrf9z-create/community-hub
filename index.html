@@ -4,10 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Community Hub</title>
+
+  <!-- Favicon -->
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Icons for different sizes -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+
+  <!-- iOS Support -->
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Community Hub" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <!-- Theme color for browser -->
+  <meta name="theme-color" content="#1f6feb" />
+
+  <!-- Optional: Safari pinned tab -->
+  <link rel="mask-icon" href="/icon-192.png" color="#1f6feb" />
 </head>
 <body>
   <div id="root"></div>
+  
+  <!-- Main React entry point -->
   <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Register service worker for PWA -->
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/serviceWorker.js')
+        .then(reg => console.log('Service Worker registered.', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    });
+  }
+</script>
 </body>
 </html>
