@@ -11,12 +11,15 @@ import SettingsRender from "./pages/settingsPage/settingsRender.jsx";
 export default function App() {
   return (
     <Routes>
+      {/* Start at signup */}
+      <Route path="/" element={<Navigate to="/signup" />} />
+
       {/* Auth pages */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
       {/* Main pages */}
-      <Route path="/" element={<HomeRender />} />
+      <Route path="/home" element={<HomeRender />} />
       <Route path="/tasks" element={<TasksRender />} />
       <Route path="/teams" element={<TeamsRender />} />
       <Route path="/settings" element={<SettingsRender />} />
