@@ -1,23 +1,66 @@
-import React from 'react';
-import './ProfileContents.css';
+import React, { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient.js";
+import "./ProfileContents.css";
 
 const ProfileContents = () => {
+  const [user, setUser] = useState(null);
+
+  // Fetch current logged-in user on mount
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) setUser(user);
+    };
+    fetchUser();
+  }, []);
+
+  // Logout handler
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) return alert(error.message);
+    window.location.href = "/login"; // redirect to login page
+  };
+
+  // Delete account handler
+  const handleDelete = async () => {
+    if (!user) return;
+    const confirm = window.confirm(
+      "Are you sure you want to delete your account? This cannot be undone."
+    );
+    if (!confirm) return;
+
+    const { error } = await supabase.auth.admin.deleteUser(user.id); 
+    // Note: Supabase admin API is required for deleteUser
+    if (error) return alert(error.message);
+
+    alert("Account deleted successfully.");
+    window.location.href = "/signup";
+  };
+
+  if (!user) {
+    return <p>Loading user info...</p>;
+  }
+
   return (
     <div className="page-content">
 
       {/* User Info */}
       <section className="user-info">
-        <img src="https://i.pravatar.cc/100" alt="User Avatar" className="avatar" />
-        <h2 id="username">Artwell Mutanhau</h2>
-        <p id="email">artwell@example.com</p>
+        <img
+          src={user.user_metadata?.avatar_url || "https://i.pravatar.cc/100"}
+          alt="User Avatar"
+          className="avatar"
+        />
+        <h2 id="username">{user.user_metadata?.full_name || user.email}</h2>
+        <p id="email">{user.email}</p>
       </section>
 
       {/* Account Actions */}
       <section className="account-actions">
-        <button id="logoutBtn" className="action-btn">
+        <button onClick={handleLogout} className="action-btn">
           <i className="fas fa-right-from-bracket"></i> Log Out
         </button>
-        <button id="deleteAccountBtn" className="action-btn delete">
+        <button onClick={handleDelete} className="action-btn delete">
           <i className="fas fa-trash"></i> Delete Account
         </button>
       </section>
