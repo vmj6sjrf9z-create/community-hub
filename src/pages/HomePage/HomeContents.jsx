@@ -1,13 +1,18 @@
 import React from "react";
 import "./HomeContents.css";
 import BottomNav from "../../components/BottomNav/BottomNav";
+import { useUser } from "../../context/UserContext.jsx";
 
 const HomeContents = () => {
+  const { user } = useUser();
+
   return (
     <div className="phone">
       {/* Greeting */}
       <section className="greeting">
-        <h1>Good afternoon, Artwell 👋</h1>
+        <h1>
+          Good afternoon, {user?.user_metadata?.full_name || "User"} 👋
+        </h1>
         <p>Here's what's happening today</p>
       </section>
 
