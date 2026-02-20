@@ -1,8 +1,7 @@
 import "./TasksContents.css";
 import TaskCard from "../../components/TaskCard/TaskCard";
-import BottomNav from "../../components/BottomNav/BottomNav";
 
-function TasksContents() {
+function TasksContents({ tasks, onTaskClick }) {
   return (
     <div className="tasks-page">
 
@@ -11,26 +10,21 @@ function TasksContents() {
       </section>
 
       <section className="tasks-cards">
-        <TaskCard 
-          title="Finish project report"
-          due="Due: Today, 5 PM"
-          color="blue"
-        />
-
-        <TaskCard 
-          title="Team meeting prep"
-          due="Due: Tomorrow, 10 AM"
-          color="green"
-        />
-
-        <TaskCard 
-          title="Update website content"
-          due="Due: Friday, 12 PM"
-          color="purple"
-        />
+        {tasks.length === 0 ? (
+          <p style={{ color: "#9aa4b2", textAlign: "center" }}>No tasks yet</p>
+        ) : (
+          tasks.map((task, index) => (
+            <TaskCard
+              key={index}
+              title={task.title}
+              createdAt={task.createdAt}
+              due={task.due}
+              color={task.color}
+              onClick={() => onTaskClick(task)}
+            />
+          ))
+        )}
       </section>
-
-      <BottomNav active="tasks" />
     </div>
   );
 }
