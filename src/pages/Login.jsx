@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient.js";
 import { useNavigate } from "react-router-dom";
 import PasswordToggle from "../components/PasswordToggle.jsx";
 import ExternalAuth from "../components/ExternalAuth.jsx";
+import { useUser } from "../context/UserContext.jsx";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { user } = useUser();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate("/home");
+  }, [user, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return alert(error.message);
 
-    // Redirect to home page after login
-    navigate("/home");
+    // UserContext listener will auto-redirect
   };
 
   return (
