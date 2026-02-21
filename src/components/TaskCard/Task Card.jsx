@@ -1,9 +1,15 @@
 import "./TaskCard.css";
 
-function TaskCard({ title, due, createdAt, color, onClick }) {
+function TaskCard({ title, due, createdAt, priority, onClick }) {
+  // Set icon color based on priority
+  let colorClass = "";
+  if (priority === "Low") colorClass = "purple";
+  else if (priority === "Medium") colorClass = "green";
+  else if (priority === "High") colorClass = "red";
+
   return (
     <div className="task-card" onClick={onClick}>
-      <div className={`task-icon ${color}`}>
+      <div className={`task-icon ${colorClass}`}>
         <i className="fas fa-tasks"></i>
       </div>
 
@@ -12,8 +18,8 @@ function TaskCard({ title, due, createdAt, color, onClick }) {
         <p>Created: {createdAt}</p>
         <p>Due: {due}</p>
       </div>
+
       <i className="fas fa-chevron-right arrow"></i>
-    </div>
     </div>
   );
 }
