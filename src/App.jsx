@@ -16,6 +16,7 @@ export default function App() {
   return (
     <UserProvider>
       <Routes>
+        <Route path="/auth/callback" element={<AuthCallback />} />
         {/* Auth-only routes */}
         <Route
           path="/signup"
