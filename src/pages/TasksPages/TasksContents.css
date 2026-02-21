@@ -1,8 +1,13 @@
-.tasks-page{
-  min-height:100vh;
-  background:linear-gradient(180deg,#0f1624,#0b0f17);
-  padding:90px 18px 100px;
-  color:white;
+.tasks-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0f1624, #0b0f17);
+  padding: 90px 18px 100px; /* top padding to avoid topbar */
+  color: white;
+  
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* <-- allows vertical scrolling */
+  max-height: 100vh; /* <-- confines to viewport */
 }
 
 .tasks-greeting p{
