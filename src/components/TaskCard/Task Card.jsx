@@ -1,11 +1,13 @@
 import "./TaskCard.css";
 
 function TaskCard({ title, due, createdAt, priority, onClick }) {
-  // Set icon color based on priority
-  let colorClass = "";
-  if (priority === "Low") colorClass = "purple";
-  else if (priority === "Medium") colorClass = "green";
-  else if (priority === "High") colorClass = "red";
+  const priorityColors = {
+    Low: "purple",
+    Medium: "green",
+    High: "red",
+  };
+
+  const colorClass = priorityColors[priority] || "";
 
   return (
     <div className="task-card" onClick={onClick}>
