@@ -22,7 +22,6 @@ function TasksRender() {
   const [dueInput, setDueInput] = useState("");
 
   const navigate = useNavigate();
-  const colors = ["blue", "green", "red", "purple"];
 
   const createTask = () => {
     const createdAt = new Date();
@@ -49,13 +48,10 @@ function TasksRender() {
       priority,
       createdAt: formattedCreated,
       due: formattedDue,
-      color: colors[Math.floor(Math.random() * colors.length)],
       community: "Xalteam@CommunityHub",
     };
 
-    const updatedTasks = [...tasks, newTask];
-    setTasks(updatedTasks);
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // save immediately
+    setTasks((prev) => [...prev, newTask]);
 
     setTitleInput("");
     setDescInput("");
@@ -63,7 +59,7 @@ function TasksRender() {
     setPriority("Medium");
     setShowModal(false);
 
-    navigate(`/tasks/${newTask.id}`);
+    navigate(`/tasks/${newTask.id}`, { state: newTask });
   };
 
   return (
@@ -72,7 +68,7 @@ function TasksRender() {
 
       <TasksContents
         tasks={tasks}
-        onTaskClick={(task) => navigate(`/tasks/${task.id}`)}
+        onTaskClick={(task) => navigate(`/tasks/${task.id}`, { state: task })}
       />
 
       {showModal && (
@@ -104,10 +100,7 @@ function TasksRender() {
             <input
               type="datetime-local"
               value={dueInput}
-              onChange={(e) => {
-                setDueInput(e.target.value);
-                setDueError("");
-              }}
+              onChange={(e) => { setDueInput(e.target.value); setDueError(""); }}
             />
 
             {dueError && <p style={{ color: "red" }}>{dueError}</p>}
