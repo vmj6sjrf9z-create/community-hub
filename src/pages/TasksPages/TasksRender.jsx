@@ -38,7 +38,10 @@ function TasksRender() {
     });
 
     const formattedDue = dueDate
-      ? dueDate.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })
+      ? dueDate.toLocaleString("en-GB", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        })
       : "Not set";
 
     const newTask = {
@@ -59,16 +62,16 @@ function TasksRender() {
     setPriority("Medium");
     setShowModal(false);
 
-    navigate(`/tasks/${newTask.id}`, { state: newTask });
+    navigate(`/tasks/${newTask.id}`);
   };
 
   return (
-    <div className="phone">
+    <div className="tasks-wrapper">
       <TopNavTasks onAddClick={() => setShowModal(true)} />
 
       <TasksContents
         tasks={tasks}
-        onTaskClick={(task) => navigate(`/tasks/${task.id}`, { state: task })}
+        onTaskClick={(task) => navigate(`/tasks/${task.id}`)}
       />
 
       {showModal && (
@@ -100,7 +103,10 @@ function TasksRender() {
             <input
               type="datetime-local"
               value={dueInput}
-              onChange={(e) => { setDueInput(e.target.value); setDueError(""); }}
+              onChange={(e) => {
+                setDueInput(e.target.value);
+                setDueError("");
+              }}
             />
 
             {dueError && <p style={{ color: "red" }}>{dueError}</p>}
