@@ -1,48 +1,44 @@
-import React from "react";
-import { useUser } from "../../context/UserContext.jsx";
-import { supabase } from "../../lib/supabaseClient.js";
+import React, { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient.js";
 import "./ProfileContents.css";
 
 const ProfileContents = () => {
-  const { user } = useUser();
+  const [user, setUser] = useState(null);
 
-  if (!user) return <p>Loading user info...</p>;
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (data.user) setUser(data.user);
+    };
+    fetchUser();
+  }, []);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) return alert(error.message);
-    window.location.href = "/login"; 
+    window.location.href = "/login";
   };
 
   const handleDelete = async () => {
     if (!user) return;
-    const confirm = window.confirm(
-      "Are you sure you want to delete your account? This cannot be undone."
-    );
+    const confirm = window.confirm("Are you sure you want to delete your account? This cannot be undone.");
     if (!confirm) return;
-
     const { error } = await supabase.auth.admin.deleteUser(user.id);
     if (error) return alert(error.message);
-
     alert("Account deleted successfully.");
     window.location.href = "/signup";
   };
 
+  if (!user) return <p>Loading user info...</p>;
+
   return (
     <div className="page-content">
-
-      {/* User Info */}
       <section className="user-info">
-        <img
-          src={user.user_metadata?.avatar_url || "https://i.pravatar.cc/100"}
-          alt="User Avatar"
-          className="avatar"
-        />
+        <img src={user.user_metadata?.avatar_url || "https://i.pravatar.cc/100"} alt="Avatar" className="avatar" />
         <h2 id="username">{user.user_metadata?.full_name || user.email}</h2>
         <p id="email">{user.email}</p>
       </section>
 
-      {/* Account Actions */}
       <section className="account-actions">
         <button onClick={handleLogout} className="action-btn">
           <i className="fas fa-right-from-bracket"></i> Log Out
@@ -52,18 +48,12 @@ const ProfileContents = () => {
         </button>
       </section>
 
-      {/* Security Settings */}
       <section className="security-settings">
         <h3>Security</h3>
-        <button className="action-btn">
-          <i className="fas fa-lock"></i> Change Password
-        </button>
-        <button className="action-btn">
-          <i className="fas fa-shield-alt"></i> Enable 2FA
-        </button>
+        <button className="action-btn"><i className="fas fa-lock"></i> Change Password</button>
+        <button className="action-btn"><i className="fas fa-shield-alt"></i> Enable 2FA</button>
       </section>
 
-      {/* Discord Servers List */}
       <section className="discord-servers">
         <h3>Discord Servers</h3>
         <ul id="serversList">
@@ -72,7 +62,6 @@ const ProfileContents = () => {
           <li><i className="fab fa-discord"></i> Server 3</li>
         </ul>
       </section>
-
     </div>
   );
 };
