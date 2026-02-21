@@ -10,6 +10,15 @@ function TasksRender() {
   const [priority, setPriority] = useState("Medium");
   const [dueError, setDueError] = useState("");
 
+const [tasks, setTasks] = useState(() => {
+  const saved = localStorage.getItem("tasks");
+  return saved ? JSON.parse(saved) : [];
+});
+
+useEffect(() => {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}, [tasks]);
+
   const [titleInput, setTitleInput] = useState("");
   const [descInput, setDescInput] = useState("");
   const [dueInput, setDueInput] = useState("");
