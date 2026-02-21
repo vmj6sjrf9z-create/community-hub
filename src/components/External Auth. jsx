@@ -3,26 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 export default function ExternalAuth() {
-  const navigate = useNavigate();
-
-  // Check if a user is already logged in after redirect
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        navigate("/home"); // Navigate to home if Discord login was successful
-      }
-    };
-    checkSession();
-  }, [navigate]);
-
   const handleDiscord = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "discord",
         options: {
-          redirectTo: window.location.origin, // redirect back to your app
+          redirectTo: `${window.location.origin}/auth/callback`, // redirect to callback
         },
+      });
+
+      if (error) throw error;
+    } catch (err) {
+      alert(`Discord login error: ${err.message}`);
+    }
+  };
+
+  return (
+    <button className="discord-btn" onClick={handleDiscord}>
+      <i className="fab fa-discord"></i> Sign in with Discord
+    </button>
+  );
+}
       });
 
       if (error) throw error;
