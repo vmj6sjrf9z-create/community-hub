@@ -1,34 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabaseClient.js";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
-      if (error) {
-        console.error("Auth callback error:", error.message);
-        navigate("/signup");
-        return;
-      }
-
-      if (session?.user) {
-        navigate("/home"); // redirect to home if logged in
-      } else {
-        navigate("/signup"); // redirect to signup if not logged in
-      }
-    };
-
-    checkSession();
+    // Let UserProvider restore the session,
+    // then ProtectedRoute will handle access
+    navigate("/home", { replace: true });
   }, [navigate]);
 
   return (
     <div style={{ color: "white", textAlign: "center", marginTop: "50px" }}>
-      <p>Checking login status...</p>
+      <p>Logging you in...</p>
     </div>
   );
 }
