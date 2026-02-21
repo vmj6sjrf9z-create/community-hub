@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient.js";
 import { useNavigate } from "react-router-dom";
 import PasswordToggle from "../components/PasswordToggle.jsx";
 import ExternalAuth from "../components/ExternalAuth.jsx";
+import { useUser } from "../context/UserContext.jsx";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { user } = useUser();
   const navigate = useNavigate();
+
+  // If already logged in, redirect to home
+  useEffect(() => {
+    if (user) navigate("/home");
+  }, [user, navigate]);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -18,14 +25,12 @@ export default function Signup() {
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) return alert(error.message);
 
-    // Redirect to home page after signup
-    navigate("/home");
+    // UserContext listener will auto-redirect
   };
 
   return (
     <div className="container">
       <h1>Community Hub Sign-Up</h1>
-
       <form onSubmit={handleSignup}>
         <div className="form-group">
           <label htmlFor="username">Username <sup style={{ color: "red" }}>*</sup></label>
