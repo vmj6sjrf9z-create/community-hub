@@ -1,17 +1,23 @@
-import "./TasksInfo.css";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function TaskInfo() {
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const task = location.state;
+  const [task, setTask] = useState(null);
 
   useEffect(() => {
-    if (!task) {
+    const saved = localStorage.getItem("tasks");
+    const tasks = saved ? JSON.parse(saved) : [];
+
+    const foundTask = tasks.find((t) => String(t.id) === id);
+
+    if (!foundTask) {
       navigate("/tasks");
+    } else {
+      setTask(foundTask);
     }
-  }, [task, navigate]);
+  }, [id, navigate]);
 
   if (!task) return null;
 
