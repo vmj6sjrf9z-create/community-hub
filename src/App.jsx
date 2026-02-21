@@ -1,4 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { UserProvider } from "./context/UserContext.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import AuthRoute from "./components/AuthRoute.jsx";
 
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
@@ -10,21 +13,72 @@ import SettingsRender from "./pages/settingsPage/settingsRender.jsx";
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/signup" />} />
+    <UserProvider>
+      <Routes>
+        {/* Auth-only routes */}
+        <Route
+          path="/signup"
+          element={
+            <AuthRoute>
+              <Signup />
+            </AuthRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <AuthRoute>
+              <Login />
+            </AuthRoute>
+          }
+        />
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+        {/* Protected routes */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <HomeRender />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <TasksRender />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tasks/:id"
+          element={
+            <ProtectedRoute>
+              <TaskInfo />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teams"
+          element={
+            <ProtectedRoute>
+              <TeamsRender />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsRender />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route path="/home" element={<HomeRender />} />
-
-      <Route path="/tasks" element={<TasksRender />} />
-      <Route path="/tasks/:id" element={<TaskInfo />} />
-
-      <Route path="/teams" element={<TeamsRender />} />
-      <Route path="/settings" element={<SettingsRender />} />
-
-      <Route path="*" element={<Navigate to="/signup" />} />
-    </Routes>
+        {/* Default routes */}
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="*" element={<Navigate to="/signup" />} />
+      </Routes>
+    </UserProvider>
   );
 }
