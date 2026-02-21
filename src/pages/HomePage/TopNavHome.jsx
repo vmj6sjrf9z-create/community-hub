@@ -4,7 +4,6 @@ import { useUser } from "../../context/UserContext.jsx";
 
 const TopNavHome = () => {
   const { user } = useUser();
-
   const avatarUrl = user?.user_metadata?.avatar_url || "https://i.pravatar.cc/100";
 
   return (
