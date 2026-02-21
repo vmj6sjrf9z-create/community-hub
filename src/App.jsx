@@ -3,6 +3,7 @@ import { UserProvider } from "./context/UserContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AuthRoute from "./components/AuthRoute.jsx";
 
+import AuthCallback from "./pages/AuthCallback.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import HomeRender from "./pages/homePage/homeRender.jsx";
