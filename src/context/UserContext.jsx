@@ -4,14 +4,12 @@ import { supabase } from "../lib/supabaseClient.js";
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ⭐ important
+  const [user, setUser] = useState(undefined); // 🔥 undefined instead of null
 
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-      setLoading(false);
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user ?? null);
     };
 
     getSession();
@@ -22,13 +20,11 @@ export const UserProvider = ({ children }) => {
       }
     );
 
-    return () => {
-      listener.subscription.unsubscribe();
-    };
+    return () => listener.subscription.unsubscribe();
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user }}>
       {children}
     </UserContext.Provider>
   );
