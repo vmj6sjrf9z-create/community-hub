@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./TasksInfo.css";
 import { useNavigate } from "react-router-dom";
 import TopNavTasks from "./TopNavTasks";
 import TasksContents from "./TasksContents";
