@@ -1,3 +1,4 @@
+import "./TasksInfo.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function TaskInfo() {
