@@ -12,6 +12,8 @@ function TaskCard({ title, due, createdAt, color, onClick }) {
         <p>Created: {createdAt}</p>
         <p>Due: {due}</p>
       </div>
+      <i className="fas fa-chevron-right arrow"></i>
+    </div>
     </div>
   );
 }
