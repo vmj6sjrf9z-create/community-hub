@@ -1,24 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./TasksInfo.css";
 import { useNavigate } from "react-router-dom";
 import TopNavTasks from "./TopNavTasks";
 import TasksContents from "./TasksContents";
 
 function TasksRender() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   const [showModal, setShowModal] = useState(false);
   const [priority, setPriority] = useState("Medium");
   const [dueError, setDueError] = useState("");
-
-const [tasks, setTasks] = useState(() => {
-  const saved = localStorage.getItem("tasks");
-  return saved ? JSON.parse(saved) : [];
-});
-
-useEffect(() => {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-}, [tasks]);
-
   const [titleInput, setTitleInput] = useState("");
   const [descInput, setDescInput] = useState("");
   const [dueInput, setDueInput] = useState("");
@@ -41,14 +39,11 @@ useEffect(() => {
     });
 
     const formattedDue = dueDate
-      ? dueDate.toLocaleString("en-GB", {
-          dateStyle: "medium",
-          timeStyle: "short",
-        })
+      ? dueDate.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })
       : "Not set";
 
     const newTask = {
-      id: Date.now(), // 🔥 IMPORTANT
+      id: Date.now(),
       title: titleInput.trim() || "Not set",
       description: descInput.trim() || "Empty",
       priority,
@@ -58,7 +53,9 @@ useEffect(() => {
       community: "Xalteam@CommunityHub",
     };
 
-    setTasks((prev) => [...prev, newTask]);
+    const updatedTasks = [...tasks, newTask];
+    setTasks(updatedTasks);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // save immediately
 
     setTitleInput("");
     setDescInput("");
@@ -66,7 +63,7 @@ useEffect(() => {
     setPriority("Medium");
     setShowModal(false);
 
-    navigate(`/tasks/${newTask.id}`, { state: newTask });
+    navigate(`/tasks/${newTask.id}`);
   };
 
   return (
@@ -75,9 +72,7 @@ useEffect(() => {
 
       <TasksContents
         tasks={tasks}
-        onTaskClick={(task) =>
-          navigate(`/tasks/${task.id}`, { state: task })
-        }
+        onTaskClick={(task) => navigate(`/tasks/${task.id}`)}
       />
 
       {showModal && (
