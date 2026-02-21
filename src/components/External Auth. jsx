@@ -1,14 +1,17 @@
-import { supabase } from "../lib/supabaseClient.js";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { supabase } from "../lib/supabaseClient.js";
 
 export default function ExternalAuth() {
+  const navigate = useNavigate();
+
   const handleDiscord = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "discord",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`, // redirect to callback
+          // This ensures Supabase redirects back to your app correctly
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
@@ -18,19 +21,17 @@ export default function ExternalAuth() {
     }
   };
 
-  return (
-    <button className="discord-btn" onClick={handleDiscord}>
-      <i className="fab fa-discord"></i> Sign in with Discord
-    </button>
-  );
-}
-      });
-
-      if (error) throw error;
-    } catch (err) {
-      alert(`Discord login error: ${err.message}`);
-    }
-  };
+  // Check if user is already logged in after redirect
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        // User is logged in, navigate to home
+        navigate("/home");
+      }
+    };
+    checkUser();
+  }, [navigate]);
 
   return (
     <button className="discord-btn" onClick={handleDiscord}>
