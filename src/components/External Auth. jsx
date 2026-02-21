@@ -1,6 +1,21 @@
 import { supabase } from "../lib/supabaseClient.js";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function ExternalAuth() {
+  const navigate = useNavigate();
+
+  // Check if a user is already logged in after redirect
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        navigate("/home"); // Navigate to home if Discord login was successful
+      }
+    };
+    checkSession();
+  }, [navigate]);
+
   const handleDiscord = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
