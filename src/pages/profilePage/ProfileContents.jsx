@@ -1,27 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient.js";
+import React from "react";
+import { useUser } from "../../context/UserContext.jsx";
+import { supabase } from "../../lib/supabaseClient.js";
 import "./ProfileContents.css";
 
 const ProfileContents = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
 
-  // Fetch current logged-in user on mount
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) setUser(user);
-    };
-    fetchUser();
-  }, []);
+  if (!user) return <p>Loading user info...</p>;
 
-  // Logout handler
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) return alert(error.message);
-    window.location.href = "/login"; // redirect to login page
+    window.location.href = "/login"; 
   };
 
-  // Delete account handler
   const handleDelete = async () => {
     if (!user) return;
     const confirm = window.confirm(
@@ -29,17 +21,12 @@ const ProfileContents = () => {
     );
     if (!confirm) return;
 
-    const { error } = await supabase.auth.admin.deleteUser(user.id); 
-    // Note: Supabase admin API is required for deleteUser
+    const { error } = await supabase.auth.admin.deleteUser(user.id);
     if (error) return alert(error.message);
 
     alert("Account deleted successfully.");
     window.location.href = "/signup";
   };
-
-  if (!user) {
-    return <p>Loading user info...</p>;
-  }
 
   return (
     <div className="page-content">
@@ -68,8 +55,12 @@ const ProfileContents = () => {
       {/* Security Settings */}
       <section className="security-settings">
         <h3>Security</h3>
-        <button className="action-btn"><i className="fas fa-lock"></i> Change Password</button>
-        <button className="action-btn"><i className="fas fa-shield-alt"></i> Enable 2FA</button>
+        <button className="action-btn">
+          <i className="fas fa-lock"></i> Change Password
+        </button>
+        <button className="action-btn">
+          <i className="fas fa-shield-alt"></i> Enable 2FA
+        </button>
       </section>
 
       {/* Discord Servers List */}
